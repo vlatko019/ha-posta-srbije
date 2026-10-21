@@ -1,0 +1,14 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Track Package - Pošta Srbije",
+        "description": "Enter your tracking number and a friendly name.",
+        "data": {
+          "tracking_number": "Tracking Number",
+          "name": "Friendly Name"
+        }
+      }
+    }
+  }
+}

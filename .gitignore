@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+env/
+
+# Home Assistant local test files
+homeassistant.log
+*.db
+.storage/
+
+# IDE / macOS
+.DS_Store
+.idea/
+.vscode/

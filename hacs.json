@@ -1,0 +1,6 @@
+{
+  "name": "Pošta Srbije Tracking",
+  "render_readme": true,
+  "country": ["rs"],
+  "homeassistant": "2023.1.0"
+}

@@ -30,3 +30,24 @@ A custom Home Assistant integration to track packages via **Pošta Srbije** (`po
 - Tracks international and domestic postal numbers (e.g., `LR...NL`).
 - Exposes the latest shipment status as the sensor state.
 - Provides attributes including `last_location`, `last_update`, and full tracking event `history`.
+
+---
+
+## Dashboard Card Example
+
+To display your package status cleanly on your Home Assistant dashboard, you can use a **Markdown Card**. 
+
+1. Go to your dashboard, click the three dots in the top right, and select **Edit Dashboard**.
+2. Click **+ Add Card**, scroll down, and select **Manual** (or **Markdown**).
+3. Paste the following configuration, making sure to replace `sensor.YOUR_POSTA_SRBIJE_SENSOR` with your actual entity ID (found under *Developer Tools* -> *States*):
+
+```yaml
+type: markdown
+title: '📦 Package Status'
+content: >
+  **Tracking number:** {{ state_attr('sensor.YOUR_POSTA_SRBIJE_SENSOR','tracking_number') }}<br>
+  **Status:** {{ states('sensor.YOUR_POSTA_SRBIJE_SENSOR') }}<br>
+  **Location:** {{ state_attr('sensor.YOUR_POSTA_SRBIJE_SENSOR','last_location') }}<br>
+  **Last Update:** {{ state_attr('sensor.YOUR_POSTA_SRBIJE_SENSOR','last_update') }}<br>
+grid_options:
+  rows: auto

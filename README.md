@@ -2,6 +2,8 @@
 
 A custom Home Assistant integration to track packages via **Pošta Srbije** (`posta.rs`), fully compatible with **HACS**.
 
+> **Disclaimer:** This is an independent, community-made project and is not affiliated with, endorsed by, sponsored by, or otherwise connected to Pošta Srbije. The name is used only to identify the postal service supported by this integration.
+
 ---
 
 ## Installation

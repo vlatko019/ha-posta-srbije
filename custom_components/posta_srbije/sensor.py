@@ -13,15 +13,20 @@ from .const import DOMAIN, CONF_TRACKING_NUMBER, CONF_NAME, DEFAULT_SCAN_INTERVA
 _LOGGER = logging.getLogger(__name__)
 SCAN_INTERVAL = timedelta(seconds=DEFAULT_SCAN_INTERVAL)
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback):
+async def async_setup_entry(
+    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
+):
+    """Set up the sensor platform."""
     tracking_number = entry.data[CONF_TRACKING_NUMBER]
     custom_name = entry.data.get(CONF_NAME, tracking_number)
-    async_add_entities([PostaSrbijeSensor(tracking_number, custom_name)], True)
+    async_add_entities([PostaSrbijeSensor(tracking_number, custom_name, entry.entry_id)], True)
 
 class PostaSrbijeSensor(SensorEntity):
-    def __init__(self, tracking_number, custom_name):
+    """Representation of a Pošta Srbije tracking sensor."""
+    def __init__(self, tracking_number, custom_name, entry_id):
         self._tracking_number = tracking_number
         self._name = f"Pošta Srbije {custom_name}"
+        self._attr_unique_id = f"posta_srbije_{entry_id}_{tracking_number}"
         self._state = "Unknown"
         self._attributes = {}
 
@@ -42,12 +47,14 @@ class PostaSrbijeSensor(SensorEntity):
         return "mdi:package-variant-closed"
 
     async def async_update(self):
+        """Fetch tracking status from Pošta Srbije website."""
         url = "https://www.posta.rs/lat/alati/pracenje-posiljke.aspx"
         payload = {"broj": self._tracking_number}
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
             "Content-Type": "application/x-www-form-urlencoded"
         }
+
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.post(url, data=payload, headers=headers, timeout=15) as resp:
@@ -63,6 +70,7 @@ class PostaSrbijeSensor(SensorEntity):
         soup = BeautifulSoup(html, "html.parser")
         rows = soup.find_all("tr")
         history = []
+
         for row in rows:
             cols = row.find_all("td")
             if len(cols) >= 3:
@@ -84,3 +92,4 @@ class PostaSrbijeSensor(SensorEntity):
         else:
             self._state = "No tracking info"
             self._attributes = {"tracking_number": self._tracking_number}
+            
